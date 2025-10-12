@@ -1,0 +1,73 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="flex justify-center items-center min-h-[75vh]">
+  <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-sm">
+    
+    <!-- Toggle Buttons -->
+    <div class="flex justify-around mb-6">
+      <button id="loginTab" class="font-semibold text-red-700 border-b-2 border-red-700 pb-1">Login</button>
+      <button id="registerTab" class="font-semibold text-gray-600 hover:text-red-700">Register</button>
+    </div>
+
+    {% for message in messages %}
+      <div class="bg-red-100 text-red-700 text-sm rounded p-2 mb-3">{{ message }}</div>
+    {% endfor %}
+
+    <!-- Login Form -->
+    <form id="loginForm" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="login">
+
+      <label class="block mb-2 font-semibold">Username</label>
+      <input type="text" name="username" class="w-full p-2 border rounded mb-4" required>
+
+      <label class="block mb-2 font-semibold">Password</label>
+      <input type="password" name="password" class="w-full p-2 border rounded mb-6" required>
+
+      <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white py-2 rounded-lg font-semibold">
+        Login
+      </button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="registerForm" method="POST" class="hidden">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="register">
+
+      <label class="block mb-2 font-semibold">Username</label>
+      <input type="text" name="username" class="w-full p-2 border rounded mb-4" required>
+
+      <label class="block mb-2 font-semibold">Password</label>
+      <input type="password" name="password" class="w-full p-2 border rounded mb-4" required>
+
+      <label class="block mb-2 font-semibold">Confirm Password</label>
+      <input type="password" name="confirm" class="w-full p-2 border rounded mb-6" required>
+
+      <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-semibold">
+        Register
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const loginTab = document.getElementById('loginTab');
+  const registerTab = document.getElementById('registerTab');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+
+  loginTab.addEventListener('click', () => {
+    loginForm.classList.remove('hidden');
+    registerForm.classList.add('hidden');
+    loginTab.classList.add('text-red-700', 'border-red-700', 'border-b-2');
+    registerTab.classList.remove('text-red-700', 'border-red-700', 'border-b-2');
+  });
+
+  registerTab.addEventListener('click', () => {
+    loginForm.classList.add('hidden');
+    registerForm.classList.remove('hidden');
+    registerTab.classList.add('text-red-700', 'border-red-700', 'border-b-2');
+    loginTab.classList.remove('text-red-700', 'border-red-700', 'border-b-2');
+  });
+</script>
+{% endblock %}

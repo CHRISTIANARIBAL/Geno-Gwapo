@@ -1,0 +1,50 @@
+{% extends 'shop/myadmin/admin_base.html' %}
+{% block content %}
+
+<h2 class="text-3xl font-bold mb-6 text-gray-800">Admin Dashboard</h2>
+<p class="text-gray-600 mb-8">Welcome back, <strong>{{ user.username }}</strong>!</p>
+
+<!-- Dashboard Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+  <div class="bg-white shadow-lg rounded-lg p-6 flex items-center justify-between hover:shadow-xl transition">
+    <div>
+      <h3 class="text-gray-700 text-lg font-semibold">Total Products</h3>
+      <p class="text-3xl font-bold text-red-700">{{ total_products }}</p>
+    </div>
+    <a href="{% url 'admin_products' %}" class="bg-red-700 hover:bg-red-800 text-white px-3 py-1 rounded">
+      Manage
+    </a>
+  </div>
+
+  <div class="bg-white shadow-lg rounded-lg p-6 flex items-center justify-between hover:shadow-xl transition">
+    <div>
+      <h3 class="text-gray-700 text-lg font-semibold">Total Categories</h3>
+      <p class="text-3xl font-bold text-blue-700">{{ total_categories }}</p>
+    </div>
+    <a href="{% url 'admin_categories' %}" class="bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded">
+      Manage
+    </a>
+  </div>
+
+  <div class="bg-white shadow-lg rounded-lg p-6 flex items-center justify-between hover:shadow-xl transition">
+    <div>
+      <h3 class="text-gray-700 text-lg font-semibold">Total Orders</h3>
+      <p class="text-3xl font-bold text-green-700">{{ total_orders }}</p>
+    </div>
+    <a href="{% url 'admin_orders' %}" class="bg-green-700 hover:bg-green-800 text-white px-3 py-1 rounded">
+      View
+    </a>
+  </div>
+</div>
+
+<!-- Quick Links -->
+<div class="mt-10">
+  <h3 class="text-2xl font-semibold mb-4">Quick Actions</h3>
+  <div class="flex flex-wrap gap-4">
+    <a href="{% url 'admin_add_product' %}" class="bg-green-700 hover:bg-green-800 text-white px-5 py-2 rounded-lg shadow-md transition">Add Product</a>
+    <a href="{% url 'admin_products' %}" class="bg-gray-700 hover:bg-gray-800 text-white px-5 py-2 rounded-lg shadow-md transition">View Products</a>
+  </div>
+</div>
+
+{% endblock %}

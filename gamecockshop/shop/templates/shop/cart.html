@@ -1,0 +1,96 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold mb-6 text-center">🛒 Your Cart</h2>
+
+  {% if cart_items %}
+  <form id="cart-form" method="post" action="{% url 'update_cart' %}">
+    {% csrf_token %}
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-3">
+              <input type="checkbox" id="select-all" class="cursor-pointer">
+            </th>
+            <th class="p-3">Image</th>
+            <th class="p-3">Product</th>
+            <th class="p-3 text-center">Quantity</th>
+            <th class="p-3 text-right">Price</th>
+            <th class="p-3 text-right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+          <tr class="border-b hover:bg-gray-50">
+            <td class="p-3 text-center">
+              <input type="checkbox" name="selected_items" value="{{ item.id }}" class="item-checkbox cursor-pointer">
+            </td>
+            <td class="p-3">
+              {% if item.image %}
+              <img src="{{ item.image }}" alt="{{ item.name }}" class="w-16 h-16 object-cover rounded">
+              {% else %}
+              <div class="w-16 h-16 bg-gray-200 flex items-center justify-center text-gray-400">No Image</div>
+              {% endif %}
+            </td>
+            <td class="p-3">{{ item.name }}</td>
+            <td class="p-3 text-center flex justify-center items-center space-x-2">
+              <button type="submit" name="action" value="decrease_{{ item.id }}"
+                class="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400">−</button>
+              <span class="w-8 text-center">{{ item.quantity }}</span>
+              <button type="submit" name="action" value="increase_{{ item.id }}"
+                class="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400">+</button>
+            </td>
+            <td class="p-3 text-right">₱{{ item.price }}</td>
+            <td class="p-3 text-right">₱{{ item.subtotal }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="mt-6 flex justify-between items-center">
+        <p class="text-xl font-bold">Total: ₱{{ total }}</p>
+
+        <!-- ✅ Checkout Button -->
+        <button type="button" id="checkout-btn"
+          class="bg-red-700 text-white px-6 py-2 rounded-lg hover:bg-red-800 transition">
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- ✅ Hidden Checkout Form -->
+  <form id="checkout-form" method="post" action="{% url 'checkout' %}" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="selected_items" id="selected-items-input">
+  </form>
+
+  {% else %}
+  <p class="text-center text-gray-500">Your cart is empty.</p>
+  {% endif %}
+</div>
+
+<script>
+  // ✅ Select-all checkbox functionality
+  document.getElementById("select-all")?.addEventListener("change", function () {
+    document.querySelectorAll(".item-checkbox").forEach(cb => cb.checked = this.checked);
+  });
+
+  // ✅ Proceed to Checkout button handler
+  document.getElementById("checkout-btn")?.addEventListener("click", function () {
+    const checkedItems = Array.from(document.querySelectorAll(".item-checkbox:checked"));
+    if (checkedItems.length === 0) {
+      alert("⚠️ Please select at least one product before proceeding to checkout.");
+      return;
+    }
+
+    // Collect selected product IDs
+    const selectedIds = checkedItems.map(cb => cb.value);
+    document.getElementById("selected-items-input").value = JSON.stringify(selectedIds);
+
+    // Submit hidden checkout form
+    document.getElementById("checkout-form").submit();
+  });
+</script>
+{% endblock %}

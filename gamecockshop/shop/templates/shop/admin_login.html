@@ -1,0 +1,23 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="flex justify-center items-center min-h-[70vh]">
+  <form method="POST" class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-sm">
+    {% csrf_token %}
+    <h2 class="text-xl sm:text-2xl font-bold mb-4 text-center">Admin Login</h2>
+
+    {% for message in messages %}
+      <div class="bg-red-100 text-red-700 text-sm rounded p-2 mb-3">{{ message }}</div>
+    {% endfor %}
+
+    <label class="block mb-2 font-semibold">Username</label>
+    <input type="text" name="username" class="w-full p-2 border rounded mb-4" required>
+
+    <label class="block mb-2 font-semibold">Password</label>
+    <input type="password" name="password" class="w-full p-2 border rounded mb-6" required>
+
+    <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white py-2 rounded-lg font-semibold">
+      Login
+    </button>
+  </form>
+</div>
+{% endblock %}

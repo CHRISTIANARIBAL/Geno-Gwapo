@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gamecock E-Commerce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* 🔥 Smooth fade for messages */
+    .fade-out {
+      animation: fadeOut 0.5s ease-in-out forwards;
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen flex flex-col">
+
+  <!-- 🔝 Sticky Navbar -->
+  <nav class="bg-gradient-to-r from-red-700 to-red-600 text-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center px-6 py-4">
+      <h1 class="text-2xl font-bold tracking-wide hover:scale-105 transition-transform duration-200">
+        🐓 Gamecock E-Shop
+      </h1>
+
+      <div class="flex items-center space-x-4 text-sm sm:text-base">
+        <a href="/" class="hover:text-yellow-300 transition duration-200">🏠 Home</a>
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'cart' %}" class="hover:text-yellow-300 transition duration-200">🛒 Cart</a>
+          <a href="/logout/" class="hover:text-yellow-300 transition duration-200">🚪 Logout</a>
+        {% else %}
+          <a href="/login/" class="hover:text-yellow-300 transition duration-200">👤 User Login</a>
+          <a href="/admin-login/" class="hover:text-yellow-300 transition duration-200">🛠️ Admin Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- 💬 Django Messages -->
+  {% if messages %}
+  <div id="messages" class="fixed top-20 right-4 z-50 space-y-3 max-w-sm w-full">
+    {% for message in messages %}
+      {% if message.tags == "success" %}
+        <div class="bg-green-100 border-l-4 border-green-600 text-green-800 px-4 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+          ✅ {{ message }}
+        </div>
+      {% elif message.tags == "warning" %}
+        <div class="bg-yellow-100 border-l-4 border-yellow-600 text-yellow-800 px-4 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+          ⚠️ {{ message }}
+        </div>
+      {% elif message.tags == "error" %}
+        <div class="bg-red-100 border-l-4 border-red-600 text-red-800 px-4 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+          ❌ {{ message }}
+        </div>
+      {% else %}
+        <div class="bg-blue-100 border-l-4 border-blue-600 text-blue-800 px-4 py-3 rounded-lg shadow-md transition transform hover:scale-105">
+          ℹ️ {{ message }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 🧱 Main Content -->
+  <main class="flex-1 container mx-auto px-4 sm:px-6 py-8">
+    <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-10">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <!-- ⚓ Footer -->
+  <footer class="bg-red-700 text-white text-center py-4 mt-6 shadow-inner">
+    <p class="text-sm sm:text-base tracking-wide">
+      © 2025 <span class="font-semibold">Gamecock E-Shop</span>. All rights reserved.
+    </p>
+  </footer>
+
+  <!-- ✨ Auto-hide messages after 5s -->
+  <script>
+    setTimeout(() => {
+      const messages = document.getElementById('messages');
+      if (messages) {
+        messages.classList.add('fade-out');
+        setTimeout(() => messages.remove(), 500);
+      }
+    }, 5000);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'shop/myadmin/admin_base.html' %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Edit Product</h2>
+
+<form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
+  {% csrf_token %}
+  <label class="block mb-2">Name</label>
+  <input type="text" name="name" value="{{ product.name }}" class="border p-2 w-full mb-4" required>
+
+  <label class="block mb-2">Description</label>
+  <textarea name="description" class="border p-2 w-full mb-4" required>{{ product.description }}</textarea>
+
+  <label class="block mb-2">Price</label>
+  <input type="number" step="0.01" name="price" value="{{ product.price }}" class="border p-2 w-full mb-4" required>
+
+  <label class="block mb-2">Stock</label>
+  <input type="number" name="stock" value="{{ product.stock }}" class="border p-2 w-full mb-4" required>
+
+  <label class="block mb-2">Category</label>
+  <select name="category" class="border p-2 w-full mb-4" required>
+    {% for category in categories %}
+      <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>
+        {{ category.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <label class="block mb-2">Image</label>
+  {% if product.image %}
+    <img src="{{ product.image.url }}" class="w-24 h-24 mb-2 object-cover rounded">
+  {% endif %}
+  <input type="file" name="image" class="border p-2 w-full mb-4">
+
+  <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Update Product</button>
+</form>
+{% endblock %}

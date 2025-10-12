@@ -1,0 +1,32 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold mb-6 text-center">Available Gamecocks</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {% for product in products %}
+      <div class="bg-white rounded-xl shadow hover:shadow-lg transition p-4">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover rounded-lg mb-3">
+        {% else %}
+          <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500 rounded-lg mb-3">
+            No Image Available
+          </div>
+        {% endif %}
+
+        <h3 class="text-lg font-semibold">{{ product.name }}</h3>
+        <p class="text-gray-600 text-sm mb-1">Category: {{ product.category.name }}</p>
+        <p class="text-gray-600 text-sm mb-1">Stock: {{ product.stock }}</p>
+        <p class="text-gray-700 text-sm mb-2">{{ product.description|truncatechars:60 }}</p>
+        <p class="font-bold text-red-600 mb-3">₱{{ product.price }}</p>
+
+        <form action="{% url 'add_to_cart' product.id %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="w-full bg-red-700 text-white py-2 rounded-lg hover:bg-red-800">
+            Add to Cart
+          </button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

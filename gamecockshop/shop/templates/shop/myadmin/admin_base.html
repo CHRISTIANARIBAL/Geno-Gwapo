@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gamecock Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Navbar -->
+  <nav class="bg-gray-900 text-white flex justify-between items-center px-6 py-4">
+    <h1 class="text-xl font-bold"><a href="{% url 'admin_dashboard' %}">Gamecock Admin</a></h1>
+    <div class="space-x-4">
+      <a href="{% url 'admin_dashboard' %}" class="hover:underline">Dashboard</a>
+      <a href="{% url 'admin_products' %}" class="hover:underline">Products</a>
+      <a href="{% url 'logout' %}" class="hover:underline text-red-400">Logout</a>
+    </div>
+  </nav>
+
+  <main class="flex-1 container mx-auto p-6">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="bg-gray-900 text-white text-center py-3">
+    © 2025 Gamecock Admin Panel
+  </footer>
+
+</body>
+</html>
