@@ -4,6 +4,7 @@
 
 <form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
   {% csrf_token %}
+
   <label class="block mb-2">Name</label>
   <input type="text" name="name" value="{{ product.name }}" class="border p-2 w-full mb-4" required>
 
@@ -17,13 +18,20 @@
   <input type="number" name="stock" value="{{ product.stock }}" class="border p-2 w-full mb-4" required>
 
   <label class="block mb-2">Category</label>
-  <select name="category" class="border p-2 w-full mb-4" required>
+  <select name="category" id="category-select" class="border p-2 w-full mb-4" required>
+    <option value="">-- Select Existing Category --</option>
     {% for category in categories %}
       <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>
         {{ category.name }}
       </option>
     {% endfor %}
+    <option value="new">➕ Add New Category</option>
   </select>
+
+  <div id="new-category-input" class="hidden transition-all duration-300 ease-in-out">
+    <label class="block mb-2">New Category Name</label>
+    <input type="text" name="new_category" class="border p-2 w-full mb-4" placeholder="Enter new category name">
+  </div>
 
   <label class="block mb-2">Image</label>
   {% if product.image %}
@@ -31,6 +39,23 @@
   {% endif %}
   <input type="file" name="image" class="border p-2 w-full mb-4">
 
-  <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">Update Product</button>
+  <button type="submit" class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">
+    Update Product
+  </button>
 </form>
+
+<script>
+  const categorySelect = document.getElementById('category-select');
+  const newCatInput = document.getElementById('new-category-input');
+
+  categorySelect.addEventListener('change', function() {
+    if (this.value === 'new') {
+      newCatInput.classList.remove('hidden');
+      newCatInput.classList.add('block');
+    } else {
+      newCatInput.classList.add('hidden');
+      newCatInput.classList.remove('block');
+    }
+  });
+</script>
 {% endblock %}

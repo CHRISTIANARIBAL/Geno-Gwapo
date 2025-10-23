@@ -295,10 +295,16 @@ def admin_add_product(request):
         description = request.POST['description']
         price = request.POST['price']
         stock = request.POST['stock']
-        category_id = request.POST['category']
         image = request.FILES.get('image')
+        category_id = request.POST['category']
+        new_category_name = request.POST.get('new_category', '').strip()
 
-        category = get_object_or_404(Category, id=category_id)
+        # Handle new category creation
+        if category_id == 'new' and new_category_name:
+            category, created = Category.objects.get_or_create(name=new_category_name)
+        else:
+            category = get_object_or_404(Category, id=category_id)
+
         Product.objects.create(
             category=category,
             name=name,
@@ -307,6 +313,7 @@ def admin_add_product(request):
             stock=stock,
             image=image
         )
+
         messages.success(request, "Product added successfully!")
         return redirect('admin_products')
 
@@ -325,14 +332,28 @@ def admin_edit_product(request, product_id):
         product.description = request.POST['description']
         product.price = request.POST['price']
         product.stock = request.POST['stock']
-        product.category = get_object_or_404(Category, id=request.POST['category'])
-        if 'image' in request.FILES:
-            product.image = request.FILES['image']
+        image = request.FILES.get('image')
+        category_id = request.POST.get('category')
+        new_category_name = request.POST.get('new_category', '').strip()
+
+        # Handle category update
+        if category_id == 'new' and new_category_name:
+            category, _ = Category.objects.get_or_create(name=new_category_name)
+        else:
+            category = get_object_or_404(Category, id=category_id)
+        product.category = category
+
+        if image:
+            product.image = image
+
         product.save()
         messages.success(request, "Product updated successfully!")
         return redirect('admin_products')
 
-    return render(request, 'shop/myadmin/edit_product.html', {'product': product, 'categories': categories})
+    return render(request, 'shop/myadmin/edit_product.html', {
+        'product': product,
+        'categories': categories
+    })
 
 @login_required(login_url='admin_login')
 def admin_delete_product(request, product_id):

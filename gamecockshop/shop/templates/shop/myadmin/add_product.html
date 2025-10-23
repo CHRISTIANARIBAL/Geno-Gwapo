@@ -16,16 +16,34 @@
   <label class="block mb-2">Stock</label>
   <input type="number" name="stock" class="border p-2 w-full mb-4" required>
 
-  <label class="block mb-2">Category</label>
-  <select name="category" class="border p-2 w-full mb-4" required>
-    {% for category in categories %}
-      <option value="{{ category.id }}">{{ category.name }}</option>
-    {% endfor %}
-  </select>
+<label class="block mb-2">Category</label>
+<select name="category" id="category-select" class="border p-2 w-full mb-4" required>
+  <option value="">-- Select Existing Category --</option>
+  {% for category in categories %}
+    <option value="{{ category.id }}">{{ category.name }}</option>
+  {% endfor %}
+  <option value="new">➕ Add New Category</option>
+</select>
+
+<div id="new-category-input" class="hidden">
+  <label class="block mb-2">New Category Name</label>
+  <input type="text" name="new_category" class="border p-2 w-full mb-4" placeholder="Enter new category name">
+</div>
 
   <label class="block mb-2">Image</label>
   <input type="file" name="image" class="border p-2 w-full mb-4">
 
   <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">Add Product</button>
 </form>
+
+<script>
+  document.getElementById('category-select').addEventListener('change', function() {
+    const newCatInput = document.getElementById('new-category-input');
+    if (this.value === 'new') {
+      newCatInput.classList.remove('hidden');
+    } else {
+      newCatInput.classList.add('hidden');
+    }
+  });
+</script>
 {% endblock %}
