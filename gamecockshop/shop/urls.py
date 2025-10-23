@@ -14,7 +14,7 @@ urlpatterns = [
 
     # Admin dashboard & home
     path('dashboard/', views.admin_dashboard, name='admin_dashboard'),
-     path('myadmin/products/', views.admin_products, name='admin_products'),
+    path('myadmin/products/', views.admin_products, name='admin_products'),
     path('myadmin/products/add/', views.admin_add_product, name='admin_add_product'),
     path('myadmin/products/<int:product_id>/edit/', views.admin_edit_product, name='admin_edit_product'),
     path('myadmin/products/<int:product_id>/delete/', views.admin_delete_product, name='admin_delete_product'),
